@@ -10,7 +10,7 @@ public class ZoomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     weak var fromDelegate: ZoomAnimatorDelegate!
     weak var toDelegate: ZoomAnimatorDelegate!
     
-    private let originalImageIsRounded: Bool
+    let originalImageIsRounded: Bool
     var transitionImageView: UIImageView!
     var isPresenting = true
     
@@ -22,20 +22,16 @@ public class ZoomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
     private func animateZoomInTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
-    
         let toReferenceImageView = toDelegate.referenceImageView(for: self)!
-        
         let toVC = transitionContext.viewController(forKey: .to)!
         let fromVC = transitionContext.viewController(forKey: .from)!
-        
         let fromReferenceImageView = fromDelegate.referenceImageView(for: self)!
         let fromReferenceImageViewFrame = fromDelegate.referenceImageViewFrameInTransitioningView(for: self)!
+        let referenceImage = fromReferenceImageView.image!
         
         toVC.view.alpha = 0
         toReferenceImageView.isHidden = true
         containerView.addSubview(toVC.view)
-        
-        let referenceImage = fromReferenceImageView.image!
         
         change(transitionImage: referenceImage, frame: fromReferenceImageViewFrame)
         

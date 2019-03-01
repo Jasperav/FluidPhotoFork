@@ -42,8 +42,11 @@ class ZoomDismissalInteractionController: NSObject {
                        animations: {
                         fromVC.view.alpha = 0
                         transitionImageView.frame = toReferenceImageViewFrame
-                        
                         toVC.tabBarController?.tabBar.alpha = 1
+                        
+                        if self.animator.originalImageIsRounded {
+                            transitionImageView.layer.cornerRadius = toReferenceImageViewFrame.height / 2
+                        }
         }, completion: { _ in
             transitionImageView.removeFromSuperview()
             toReferenceImageView?.isHidden = false

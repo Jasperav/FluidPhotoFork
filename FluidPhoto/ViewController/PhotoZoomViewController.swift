@@ -35,7 +35,7 @@ open class PhotoZoomViewController: UIViewController, UIGestureRecognizerDelegat
         static let transitionDuration: TimeInterval = 0.25
     }
     
-    var transitionController: ZoomTransitionController
+    private let transitionController: ZoomTransitionController
     var firstTimeLoaded = true
     
     private var correctedZoomScale: CGFloat = 1.0
@@ -46,11 +46,17 @@ open class PhotoZoomViewController: UIViewController, UIGestureRecognizerDelegat
     private var panGestureRecognizer: UIPanGestureRecognizer!
     private var singleTapGestureRecognizer: UITapGestureRecognizer!
     
-    init(image: UIImage, originalImageIsRounded: Bool) {
+    init(image: UIImage, originalImageIsRounded: Bool, presenter: ZoomAnimatorDelegate & UIViewController) {
         imageView = ImageViewConstraints(image: image)
         transitionController = ZoomTransitionController(originalImageIsRounded: originalImageIsRounded)
         
         super.init(nibName: nil, bundle: nil)
+        
+        assert(presenter.navigationController!.delegate == nil)
+        
+        presenter.navigationController!.delegate = transitionController
+        transitionController.fromDelegate = presenter
+        transitionController.toDelegate = self
         
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPanWith(gestureRecognizer:)))
         panGestureRecognizer.delegate = self

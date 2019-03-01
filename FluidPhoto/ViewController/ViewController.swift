@@ -94,11 +94,9 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
         
-        let vc = PhotoZoomViewController(image: photos[selectedIndexPath.row], originalImageIsRounded: true)
+        let vc = PhotoZoomViewController(image: photos[selectedIndexPath.row], originalImageIsRounded: true, presenter: self)
         
-        navigationController!.delegate = vc.transitionController
-        vc.transitionController.fromDelegate = self
-        vc.transitionController.toDelegate = vc
+
         
         navigationController!.pushViewController(vc, animated: true)
         
@@ -188,14 +186,7 @@ extension ViewController: ZoomAnimatorDelegate {
         //Get a guarded reference to the cell's UIImageView
         let referenceImageView = getImageViewFromCollectionViewCell(for: selectedIndexPath)
         
-        if i == 0 {
-            i += 1
-            
-            return referenceImageView
-        }
-        
         return referenceImageView
-        return nil
 
     }
     
@@ -212,14 +203,7 @@ extension ViewController: ZoomAnimatorDelegate {
             return CGRect(x: cellFrame.minX, y: collectionView.contentInset.top, width: cellFrame.width, height: cellFrame.height - (collectionView.contentInset.top - cellFrame.minY))
         }
         
-        if i == 1 {
-            return cellFrame
-            
-            
-        }
-        
-        return cellFrame
-        return nil
+       return cellFrame
     }
     
     
